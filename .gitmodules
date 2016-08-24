@@ -1,0 +1,3 @@
+[submodule "vendor/hashids.c"]
+	path = vendor/hashids.c
+	url = https://github.com/tzvetkoff/hashids.c.git
