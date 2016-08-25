@@ -56,11 +56,13 @@ class Hashids(object):
         if hex_str == '':
             return ''
 
-        result = lib.encode_hex(self._handle, hex_str)
-        if result == ffi.NULL:
-            return ''
+        numbers = (int('1' + hex_str[i:i + 12], 16)
+                   for i in range(0, len(hex_str), 12))
 
-        return _convert_buffer_to_string(result)
+        try:
+            return self.encode(*numbers)
+        except ValueError:
+            return ''
 
     def decode(self, hashid):
         if not hashid or not _is_str(hashid):
@@ -74,17 +76,16 @@ class Hashids(object):
         result = tuple(numbers[i] for i in range(numbers_count[0]))
         lib.free(numbers)
 
+        if self.encode(*result) != hashid:
+            return ()
+
         return result
 
     def decode_hex(self, hashid):
         if hashid == '':
             return ''
 
-        output = ffi.new('char[18]')
-        if lib.hashids_decode_hex(self._handle, hashid, ffi.addressof(output)) == 0:
-            return ''
-
-        return ffi.string(output)
+        return ''.join(('%x' % x)[1:] for x in self.decode(hashid))
 
 
 __all__ = ['Hashids']
