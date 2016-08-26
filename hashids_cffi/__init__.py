@@ -8,7 +8,7 @@ except NameError:
 
 def _is_str(candidate):
     """Returns whether a value is a string."""
-    return isinstance(candidate, StrType)
+    return isinstance(candidate, StrType) and all(ord(c) < 128 and not c.isspace() for c in candidate)
 
 
 def _is_uint(number):
