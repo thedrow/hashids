@@ -2,10 +2,6 @@
 
 from setuptools import setup
 
-setup_extra = {
-    'cffi_modules': ["hashids_cffi/hashids_build.py:ffi"]
-}
-
 setup(
     name="hashids-cffi",
     version="0.1.0",
@@ -15,6 +11,8 @@ setup(
     author_email="omer.drow@gmail.com",
     license="BSD",
     packages=["hashids_cffi"],
+    install_requires=['cffi>1.0'],
+    zip_safe=False,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
@@ -33,5 +31,5 @@ setup(
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Software Development',
     ],
-    **setup_extra
+    cffi_modules=["hashids_cffi/hashids_build.py:ffi"]
 )

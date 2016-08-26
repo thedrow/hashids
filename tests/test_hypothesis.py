@@ -36,7 +36,7 @@ def test_encode(salt, alphabet, min_length, numbers):
 def test_decode(salt, alphabet, min_length, hashid):
     print('=' * 50)
     print("salt='%s'" % salt)
-    print("alphabet='%s'" % bytes(alphabet))
+    print("alphabet='%s'" % alphabet)
     print("min_length=%s" % min_length)
     print("alphabet length=%s" % len(alphabet))
     print("hashid='%s'" % hashid)

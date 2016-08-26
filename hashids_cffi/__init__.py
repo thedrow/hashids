@@ -20,7 +20,7 @@ def _is_uint(number):
 
 
 def _convert_buffer_to_string(buffer):
-    result = ffi.string(buffer)
+    result = str(ffi.string(buffer).decode('ascii'))
 
     lib.free(buffer)
 
@@ -32,11 +32,13 @@ class Hashids(object):
         min_length = max(int(min_length), 0)
 
         if not min_length and alphabet is None:
-            self._handle = ffi.gc(lib.hashids_init(salt), lib.hashids_free)
+            self._handle = ffi.gc(lib.hashids_init(bytes(salt.encode('ascii'))), lib.hashids_free)
         elif min_length > 0 and alphabet is None:
-            self._handle = ffi.gc(lib.hashids_init2(salt, min_length), lib.hashids_free)
+            self._handle = ffi.gc(lib.hashids_init2(bytes(salt.encode('ascii')), min_length), lib.hashids_free)
         else:
-            self._handle = ffi.gc(lib.hashids_init3(salt, min_length, alphabet), lib.hashids_free)
+            self._handle = ffi.gc(
+                lib.hashids_init3(bytes(salt.encode('ascii')), min_length, bytes(alphabet.encode('ascii'))),
+                lib.hashids_free)
 
         if lib.hashids_errno == -2:
             raise ValueError('Alphabet must contain at least 16 '
@@ -69,7 +71,7 @@ class Hashids(object):
             return ()
 
         numbers_count = ffi.new('unsigned int *')
-        numbers = lib.decode(self._handle, hashid, numbers_count)
+        numbers = lib.decode(self._handle, bytes(hashid.encode('ascii')), numbers_count)
         if numbers == ffi.NULL:
             return ()
 
