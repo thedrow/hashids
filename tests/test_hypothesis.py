@@ -11,17 +11,29 @@ from hypothesis.strategies import text, integers, tuples, lists, sampled_from, c
 valid_characters = list(string.ascii_letters + string.digits + string.punctuation)
 
 
+@given(lists(characters(min_codepoint=128), average_size=64).map(''.join).filter(lambda s: bool(s) and not s.isspace()),
+       lists(sampled_from(valid_characters), min_size=16, average_size=16, unique=True).map(''.join),
+       integers(min_value=0, max_value=32))
+def test_unicode_salt(salt, alphabet, min_length):
+    with pytest.raises(UnicodeEncodeError):
+        HashidsCFFI(salt=salt, alphabet=alphabet, min_length=min_length)
+
+
+@given(text(alphabet=valid_characters, average_size=64),
+       lists(characters(min_codepoint=128), min_size=16, average_size=16, unique=True).map(''.join),
+       integers(min_value=0, max_value=32))
+def test_unicode_alphabet(salt, alphabet, min_length):
+    alphabet = alphabet
+    salt = salt
+
+    with pytest.raises(UnicodeEncodeError):
+        HashidsCFFI(salt=salt, alphabet=alphabet, min_length=min_length)
+
+
 @given(text(alphabet=valid_characters, average_size=64),
        lists(sampled_from(valid_characters), min_size=16, average_size=16, unique=True).map(''.join),
        integers(min_value=0, max_value=32), tuples(integers(min_value=0)))
 def test_encode(salt, alphabet, min_length, numbers):
-    print('=' * 50)
-    print("salt='%s'" % salt)
-    print("alphabet='%s'" % alphabet)
-    print("min_length=%s" % min_length)
-    print("alphabet length=%s" % len(alphabet))
-    print("numbers=%s" % list(numbers))
-
     alphabet = str(alphabet)
     salt = str(salt)
 
@@ -31,53 +43,10 @@ def test_encode(salt, alphabet, min_length, numbers):
     assert hashids.encode(*numbers) == hashids_cffi.encode(*numbers)
 
 
-@given(text(average_size=64),
-       lists(characters(min_codepoint=128), min_size=16, average_size=16, unique=True).map(''.join),
-       integers(min_value=0, max_value=32), tuples(integers(min_value=0)))
-def test_encode_unicode_salt(salt, alphabet, min_length, numbers):
-    print('=' * 50)
-    print("salt='%s'" % salt)
-    print("alphabet='%s'" % alphabet)
-    print("min_length=%s" % min_length)
-    print("alphabet length=%s" % len(alphabet))
-    print("numbers=%s" % list(numbers))
-
-    alphabet = alphabet
-    salt = salt
-
-    with pytest.raises(UnicodeEncodeError):
-        HashidsCFFI(salt=salt, alphabet=alphabet, min_length=min_length)
-
-
-@given(text(alphabet=valid_characters, average_size=64),
-       lists(characters(min_codepoint=128), min_size=16, average_size=16, unique=True).map(''.join),
-       integers(min_value=0, max_value=32), tuples(integers(min_value=0)))
-def test_encode_unicode_alphabet(salt, alphabet, min_length, numbers):
-    print('=' * 50)
-    print("salt='%s'" % salt)
-    print("alphabet='%s'" % alphabet)
-    print("min_length=%s" % min_length)
-    print("alphabet length=%s" % len(alphabet))
-    print("numbers=%s" % list(numbers))
-
-    alphabet = alphabet
-    salt = salt
-
-    with pytest.raises(UnicodeEncodeError):
-        HashidsCFFI(salt=salt, alphabet=alphabet, min_length=min_length)
-
-
 @given(text(alphabet=valid_characters, average_size=64),
        lists(sampled_from(valid_characters), min_size=16, average_size=16, unique=True).map(''.join),
        integers(min_value=0, max_value=32), text(alphabet=valid_characters, max_size=128))
 def test_decode(salt, alphabet, min_length, hashid):
-    print('=' * 50)
-    print("salt='%s'" % salt)
-    print("alphabet='%s'" % alphabet)
-    print("min_length=%s" % min_length)
-    print("alphabet length=%s" % len(alphabet))
-    print("hashid='%s'" % hashid)
-
     alphabet = str(alphabet)
     salt = str(salt)
     hashid = str(hashid)
