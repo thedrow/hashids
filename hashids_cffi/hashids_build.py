@@ -98,7 +98,7 @@ ffi.set_source('hashids_cffi._hashids',
 %s
 
 wchar_t *encode_one(struct hashids_t *hashids, unsigned long long number) {
-    wchar_t *buffer = calloc(hashids_estimate_encoded_size(hashids, 1, &number), 1);
+    wchar_t *buffer = calloc(hashids_estimate_encoded_size(hashids, 1, &number), sizeof(wchar_t));
     if (!buffer) {
         return NULL;
     }
@@ -112,7 +112,7 @@ wchar_t *encode_one(struct hashids_t *hashids, unsigned long long number) {
 
 wchar_t *encode(struct hashids_t *hashids, unsigned int numbers_count, unsigned long long *numbers)
 {
-    wchar_t *buffer = calloc(hashids_estimate_encoded_size(hashids, numbers_count, numbers), 1);
+    wchar_t *buffer = calloc(hashids_estimate_encoded_size(hashids, numbers_count, numbers), sizeof(wchar_t));
     if (!buffer) {
         return NULL;
     }
