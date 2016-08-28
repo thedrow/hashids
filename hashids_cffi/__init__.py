@@ -43,6 +43,11 @@ class Hashids(object):
         if lib.hashids_errno == -2:
             raise ValueError('Alphabet must contain at least 16 '
                              'unique characters.')
+        if lib.hashids_errno == -3:
+            raise ValueError('Alphabet must not contain spaces.')
+
+        if self._handle == ffi.NULL:
+            raise ValueError('Unknown error occurred.')
 
     def encode(self, *values):
         if not (values and all(_is_uint(x) for x in values)):
