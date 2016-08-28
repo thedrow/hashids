@@ -31,7 +31,7 @@ def test_decode_cffi(benchmark):
     @benchmark
     def bench():
         h = HashidsCFFI()
-        h.decode('gLNBk')
+        h.decode(u'gLNBk')
 
 
 @pytest.mark.benchmark(group='decode', warmup=True, min_rounds=10, warmup_iterations=1000000)
@@ -41,4 +41,4 @@ def test_decode(benchmark):
     @benchmark
     def bench():
         h = Hashids()
-        h.decode('gLNBk')
+        h.decode(u'gLNBk')

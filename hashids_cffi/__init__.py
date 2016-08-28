@@ -1,14 +1,17 @@
+from __future__ import unicode_literals
+
 from hashids_cffi._hashids import lib, ffi
 
 try:
+    UnicodeType = unicode
     StrType = basestring
 except NameError:
-    StrType = str
+    StrType = UnicodeType = str
 
 
 def _is_str(candidate):
     """Returns whether a value is a string."""
-    return isinstance(candidate, StrType) and all(ord(c) < 128 and not c.isspace() for c in candidate)
+    return isinstance(candidate, StrType)
 
 
 def _is_uint(number):
@@ -28,16 +31,16 @@ def _convert_buffer_to_string(buffer):
 
 
 class Hashids(object):
-    def __init__(self, salt='', min_length=0, alphabet=None):
+    def __init__(self, salt=u'', min_length=0, alphabet=None):
         min_length = max(int(min_length), 0)
 
         if not min_length and alphabet is None:
-            self._handle = ffi.gc(lib.hashids_init(bytes(salt.encode('ascii'))), lib.hashids_free)
+            self._handle = ffi.gc(lib.hashids_init(UnicodeType(salt)), lib.hashids_free)
         elif min_length > 0 and alphabet is None:
-            self._handle = ffi.gc(lib.hashids_init2(bytes(salt.encode('ascii')), min_length), lib.hashids_free)
+            self._handle = ffi.gc(lib.hashids_init2(UnicodeType(salt), min_length), lib.hashids_free)
         else:
             self._handle = ffi.gc(
-                lib.hashids_init3(bytes(salt.encode('ascii')), min_length, bytes(alphabet.encode('ascii'))),
+                lib.hashids_init3(UnicodeType(salt), min_length, UnicodeType(alphabet)),
                 lib.hashids_free)
 
         if lib.hashids_errno == -2:
@@ -60,6 +63,7 @@ class Hashids(object):
         return _convert_buffer_to_string(lib.encode(self._handle, numbers_count, values))
 
     def encode_hex(self, hex_str):
+        hex_str = UnicodeType(hex_str)
         if hex_str == '':
             return ''
 
@@ -74,9 +78,10 @@ class Hashids(object):
     def decode(self, hashid):
         if not hashid or not _is_str(hashid):
             return ()
+        hashid = UnicodeType(hashid)
 
         numbers_count = ffi.new('unsigned int *')
-        numbers = lib.decode(self._handle, bytes(hashid.encode('ascii')), numbers_count)
+        numbers = lib.decode(self._handle, hashid, numbers_count)
         if numbers == ffi.NULL:
             return ()
 
