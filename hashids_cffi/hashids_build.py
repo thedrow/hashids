@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf8 -*-
 
 import os
 
@@ -14,77 +14,79 @@ struct hashids_t {
     char *alphabet;
     char *alphabet_copy_1;
     char *alphabet_copy_2;
-    unsigned int alphabet_length;
+    size_t alphabet_length;
 
     char *salt;
-    unsigned int salt_length;
+    size_t salt_length;
 
     char *separators;
-    unsigned int separators_count;
+    size_t separators_count;
 
     char *guards;
-    unsigned int guards_count;
+    size_t guards_count;
 
-    unsigned int min_hash_length;
+    size_t min_hash_length;
 };
 
 /* exported function definitions */
 void
-hashids_shuffle(char *str, int str_length, char *salt, int salt_length);
+hashids_shuffle(char *str, size_t str_length, char *salt, size_t salt_length);
 
 void
 hashids_free(struct hashids_t *hashids);
 
 struct hashids_t *
-hashids_init3(const char *salt, unsigned int min_hash_length,
+hashids_init3(const char *salt, size_t min_hash_length,
     const char *alphabet);
 
 struct hashids_t *
-hashids_init2(const char *salt, unsigned int min_hash_length);
+hashids_init2(const char *salt, size_t min_hash_length);
 
 struct hashids_t *
 hashids_init(const char *salt);
 
-unsigned int
+size_t
 hashids_estimate_encoded_size(struct hashids_t *hashids,
-    unsigned int numbers_count, unsigned long long *numbers);
+    size_t numbers_count, unsigned long long *numbers);
 
-unsigned int
-hashids_estimate_encoded_size_v(struct hashids_t *hashids, unsigned int numbers_count, ...);
+size_t
+hashids_estimate_encoded_size_v(struct hashids_t *hashids,
+    size_t numbers_count, ...);
 
-unsigned int
+size_t
 hashids_encode(struct hashids_t *hashids, char *buffer,
-    unsigned int numbers_count, unsigned long long *numbers);
+    size_t numbers_count, unsigned long long *numbers);
 
-unsigned int
-hashids_encode_v(struct hashids_t *hashids, char *buffer, unsigned int numbers_count, ...);
+size_t
+hashids_encode_v(struct hashids_t *hashids, char *buffer,
+    size_t numbers_count, ...);
 
-unsigned int
+size_t
 hashids_encode_one(struct hashids_t *hashids, char *buffer,
     unsigned long long number);
 
-unsigned int
+size_t
 hashids_numbers_count(struct hashids_t *hashids, char *str);
 
-unsigned int
+size_t
 hashids_decode(struct hashids_t *hashids, char *str,
     unsigned long long *numbers);
 
-unsigned int
+size_t
 hashids_encode_hex(struct hashids_t *hashids, char *buffer,
     const char *hex_str);
 
-unsigned int
+size_t
 hashids_decode_hex(struct hashids_t *hashids, char *str, char *output);
 
 // CFFI code
 void free(void *);
 
 char *encode_one(struct hashids_t *hashids, unsigned long long number);
-char *encode(struct hashids_t *hashids, unsigned int numbers_count, unsigned long long *numbers);
+char *encode(struct hashids_t *hashids, size_t numbers_count, unsigned long long *numbers);
 char *encode_hex(struct hashids_t *hashids, const char *hex_str);
 
-unsigned long long *decode(struct hashids_t *hashids, char *str, unsigned int *numbers_count);
+unsigned long long *decode(struct hashids_t *hashids, char *str, size_t *numbers_count);
 """)
 
 vendored_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../vendor/hashids.c')
@@ -111,7 +113,7 @@ char *encode_one(struct hashids_t *hashids, unsigned long long number) {
     return buffer;
 }
 
-char *encode(struct hashids_t *hashids, unsigned int numbers_count, unsigned long long *numbers)
+char *encode(struct hashids_t *hashids, size_t numbers_count, unsigned long long *numbers)
 {
     char *buffer = calloc(hashids_estimate_encoded_size(hashids, numbers_count, numbers), 1);
     if (!buffer) {
@@ -138,7 +140,7 @@ char *encode_hex(struct hashids_t *hashids, const char *hex_str) {
     return buffer;
 }
 
-unsigned long long *decode(struct hashids_t *hashids, char *str, unsigned int *numbers_count) {
+unsigned long long *decode(struct hashids_t *hashids, char *str, size_t *numbers_count) {
     *numbers_count = hashids_numbers_count(hashids, str);
 
     if (!*numbers_count) {

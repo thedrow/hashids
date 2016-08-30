@@ -75,7 +75,7 @@ class Hashids(object):
         if not hashid or not _is_str(hashid):
             return ()
 
-        numbers_count = ffi.new('unsigned int *')
+        numbers_count = ffi.new('size_t *')
         numbers = lib.decode(self._handle, bytes(hashid.encode('ascii')), numbers_count)
         if numbers == ffi.NULL:
             return ()
