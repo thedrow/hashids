@@ -4,7 +4,7 @@ cache:
     directories:
         - $TRAVIS_BUILD_DIR/.hypothesis
 python:
-    - '2.7'
+    - '3.5'
 
 env:
     matrix:
