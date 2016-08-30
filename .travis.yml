@@ -1,0 +1,33 @@
+language: python
+cache:
+    pip: true
+    directories:
+        - $TRAVIS_BUILD_DIR/.hypothesis
+python:
+    - '2.7'
+
+env:
+    matrix:
+        - TOXENV=py27
+        - TOXENV=py33
+        - TOXENV=py34
+        - TOXENV=py35
+        - TOXENV=pypy
+
+before_install:
+    - |
+        if [ "$TOXENV" = "pypy" ]; then
+          export PYENV_ROOT="$HOME/.pyenv"
+          if [ -f "$PYENV_ROOT/bin/pyenv" ]; then
+            pushd "$PYENV_ROOT" && git pull && popd
+          else
+            rm -rf "$PYENV_ROOT" && git clone --depth 1 https://github.com/yyuu/pyenv.git "$PYENV_ROOT"
+          fi
+          export PYPY_VERSION="5.3"
+          "$PYENV_ROOT/bin/pyenv" install --skip-existing "pypy-$PYPY_VERSION"
+          virtualenv --python="$PYENV_ROOT/versions/pypy-$PYPY_VERSION/bin/python" "$HOME/virtualenvs/pypy-$PYPY_VERSION"
+          source "$HOME/virtualenvs/pypy-$PYPY_VERSION/bin/activate"
+        fi
+install: pip install tox
+
+script: tox
