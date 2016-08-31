@@ -11,6 +11,7 @@ setup(
     author_email="omer.drow@gmail.com",
     license="BSD",
     packages=["hashids_cffi"],
+    setup_requires=["cffi>=1.0.0"],
     install_requires=['cffi>1.0'],
     zip_safe=False,
     classifiers=[
