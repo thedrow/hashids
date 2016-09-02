@@ -1,1 +1,1 @@
-include vendor/hashids.c/hashids.*
+include vendor/hashids.c/src/hashids.*
