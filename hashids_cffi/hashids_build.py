@@ -28,6 +28,8 @@ struct hashids_t {
     size_t min_hash_length;
 };
 
+typedef struct hashids_t hashids_t;
+
 /* exported function definitions */
 void
 hashids_shuffle(char *str, size_t str_length, char *salt, size_t salt_length);
@@ -82,14 +84,14 @@ hashids_decode_hex(struct hashids_t *hashids, char *str, char *output);
 // CFFI code
 void free(void *);
 
-char *encode_one(struct hashids_t *hashids, unsigned long long number);
-char *encode(struct hashids_t *hashids, size_t numbers_count, unsigned long long *numbers);
-char *encode_hex(struct hashids_t *hashids, const char *hex_str);
+char *encode_one(hashids_t *hashids, unsigned long long number);
+char *encode(hashids_t *hashids, size_t numbers_count, unsigned long long *numbers);
+char *encode_hex(hashids_t *hashids, const char *hex_str);
 
-unsigned long long *decode(struct hashids_t *hashids, char *str, size_t *numbers_count);
+unsigned long long *decode(hashids_t *hashids, char *str, size_t *numbers_count);
 """)
 
-vendored_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../vendor/hashids.c')
+vendored_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../vendor/hashids.c/src')
 
 with open(os.path.join(vendored_path, 'hashids.c')) as f:
     source = f.read()
@@ -100,7 +102,7 @@ ffi.set_source('hashids_cffi._hashids',
 
 %s
 
-char *encode_one(struct hashids_t *hashids, unsigned long long number) {
+char *encode_one(hashids_t *hashids, unsigned long long number) {
     char *buffer = calloc(hashids_estimate_encoded_size(hashids, 1, &number), 1);
     if (!buffer) {
         return NULL;
@@ -113,7 +115,7 @@ char *encode_one(struct hashids_t *hashids, unsigned long long number) {
     return buffer;
 }
 
-char *encode(struct hashids_t *hashids, size_t numbers_count, unsigned long long *numbers)
+char *encode(hashids_t *hashids, size_t numbers_count, unsigned long long *numbers)
 {
     char *buffer = calloc(hashids_estimate_encoded_size(hashids, numbers_count, numbers), 1);
     if (!buffer) {
@@ -127,7 +129,7 @@ char *encode(struct hashids_t *hashids, size_t numbers_count, unsigned long long
     return buffer;
 }
 
-char *encode_hex(struct hashids_t *hashids, const char *hex_str) {
+char *encode_hex(hashids_t *hashids, const char *hex_str) {
     unsigned long long number = (unsigned long long)-1;
     char *buffer = calloc(hashids_estimate_encoded_size(hashids, 1, &number), 1);
 
