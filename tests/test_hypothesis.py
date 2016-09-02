@@ -60,13 +60,12 @@ def test_decode(salt, alphabet, min_length, hashid):
     salt = str(salt)
     hashid = str(hashid)
 
-    # TODO: Add overflow checks the to C library
-    # These cases causes integer overflow
-    assume(salt != 'c' and alphabet != 'dfhajklbncemogpq' and min_length != 0 and hashid != 'abaaaabaaababbabaaaa')
-    assume((salt != 'e' and alphabet != 'laqbmhgedjprkowfn2yzcEiAsBtGxv' and min_length != 1
-            and hashid != 'aadrakvdrakaaaab'))
-
     hashids = Hashids(salt=salt, alphabet=alphabet, min_length=min_length)
     hashids_cffi = HashidsCFFI(salt=salt, alphabet=alphabet, min_length=min_length)
 
-    assert hashids.decode(hashid) == hashids_cffi.decode(hashid)
+    hashid_decoded_number = hashids.decode(hashid)
+    # TODO: Add overflow checks the to C library
+    # These cases causes integer overflow
+    assume(hashid_decoded_number <= 2**64 - 1)
+
+    assert hashid_decoded_number == hashids_cffi.decode(hashid)
