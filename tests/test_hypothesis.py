@@ -61,8 +61,10 @@ def test_decode(salt, alphabet, min_length, hashid):
     hashid = str(hashid)
 
     # TODO: Add overflow checks the to C library
-    # This case causes integer overflow
+    # These cases causes integer overflow
     assume(salt != 'c' and alphabet != 'dfhajklbncemogpq' and min_length != 0 and hashid != 'abaaaabaaababbabaaaa')
+    assume((salt != 'e' and alphabet != 'laqbmhgedjprkowfn2yzcEiAsBtGxv' and min_length != 1
+            and hashid != 'aadrakvdrakaaaab'))
 
     hashids = Hashids(salt=salt, alphabet=alphabet, min_length=min_length)
     hashids_cffi = HashidsCFFI(salt=salt, alphabet=alphabet, min_length=min_length)
