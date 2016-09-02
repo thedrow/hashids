@@ -23,3 +23,4 @@ Limitations and Known Issues
   Only ascii encoded alphabets, salts and hashes are currently allowed.
 * The C library only supports unsigned long long integers (The maximum value is 2 :sup:`64`-1). If you need a wider range use the pure Python implementation
 * The C library does not check for overflows so on rare occasions you might be provided with incorrect results.
+* The C library is not thread safe and maintains global state for error reporting.

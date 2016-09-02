@@ -66,6 +66,6 @@ def test_decode(salt, alphabet, min_length, hashid):
     hashid_decoded_number = hashids.decode(hashid)
     # TODO: Add overflow checks the to C library
     # These cases causes integer overflow
-    assume(hashid_decoded_number <= 2**64 - 1)
+    assume(hashid_decoded_number <= 2**64 - 1 or hashid_decoded_number == ())
 
     assert hashid_decoded_number == hashids_cffi.decode(hashid)
