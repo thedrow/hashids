@@ -93,7 +93,7 @@ unsigned long long *decode(hashids_t *hashids, char *str, size_t *numbers_count)
 
 vendored_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../vendor/hashids.c/src')
 
-with open(os.path.join(vendored_path, 'hashids.c')) as f:
+with open(os.path.abspath(os.path.join(vendored_path, 'hashids.c'))) as f:
     source = f.read()
 
 ffi.set_source('hashids_cffi._hashids',
