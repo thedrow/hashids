@@ -142,7 +142,7 @@ char *encode_hex(hashids_t *hashids, const char *hex_str) {
     return buffer;
 }
 
-unsigned long long *decode(struct hashids_t *hashids, char *str, size_t *numbers_count) {
+unsigned long long *decode(hashids_t *hashids, char *str, size_t *numbers_count) {
     *numbers_count = hashids_numbers_count(hashids, str);
 
     if (!*numbers_count) {
