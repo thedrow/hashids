@@ -20,14 +20,14 @@ def _is_uint(number):
 
 
 def _convert_buffer_to_string(buffer):
-    if buffer != ffi.NULL:
-        result = str(ffi.string(buffer).decode('ascii'))
+    if lib.hashids_errno != 0 or buffer != ffi.NULL:
+        return ''
 
-        lib.free(buffer)
+    result = str(ffi.string(buffer).decode('ascii'))
 
-        return result
+    lib.free(buffer)
 
-    return ''
+    return result
 
 
 class Hashids(object):

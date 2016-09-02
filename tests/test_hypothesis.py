@@ -14,6 +14,7 @@ from hypothesis.strategies import text, integers, tuples, lists, sampled_from, c
 
 valid_characters = list(string.ascii_letters + string.digits + string.punctuation)
 MAX_EXAMPLES = 100000 if os.environ.get('CI', False) == 'true' else 10000
+MAX_ULONGLONG = 2**64 - 1
 
 
 @given(lists(characters(min_codepoint=128), average_size=64).map(''.join).filter(lambda s: bool(s) and not s.isspace()),
@@ -39,7 +40,7 @@ def test_unicode_alphabet(salt, alphabet, min_length):
 
 @given(text(alphabet=valid_characters, average_size=64),
        lists(sampled_from(valid_characters), min_size=16, average_size=16, unique=True).map(''.join),
-       integers(min_value=0, max_value=32), tuples(integers(min_value=0)))
+       integers(min_value=0, max_value=32), tuples(integers(min_value=0, max_value=MAX_ULONGLONG)))
 @settings(verbosity=Verbosity.verbose, max_examples=MAX_EXAMPLES)
 def test_encode(salt, alphabet, min_length, numbers):
     alphabet = str(alphabet)
@@ -66,6 +67,6 @@ def test_decode(salt, alphabet, min_length, hashid):
     hashid_decoded_numbers = hashids.decode(hashid)
     # TODO: Add overflow checks the to C library
     # These cases causes integer overflow
-    assume(all((number <= 2**64 - 1 for number in hashid_decoded_numbers)) or (hashid_decoded_numbers == ()))
+    assume(all((number <= MAX_ULONGLONG for number in hashid_decoded_numbers)) or (hashid_decoded_numbers == ()))
 
     assert hashid_decoded_numbers == hashids_cffi.decode(hashid)
