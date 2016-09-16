@@ -86,7 +86,6 @@ void free(void *);
 
 char *encode_one(hashids_t *hashids, unsigned long long number);
 char *encode(hashids_t *hashids, size_t numbers_count, unsigned long long *numbers);
-char *encode_hex(hashids_t *hashids, const char *hex_str);
 
 unsigned long long *decode(hashids_t *hashids, char *str, size_t *numbers_count);
 """)
@@ -125,19 +124,6 @@ char *encode(hashids_t *hashids, size_t numbers_count, unsigned long long *numbe
     if (hashids_encode(hashids, buffer, numbers_count, numbers) == 0) {
         return NULL;
     }
-
-    return buffer;
-}
-
-char *encode_hex(hashids_t *hashids, const char *hex_str) {
-    unsigned long long number = (unsigned long long)-1;
-    char *buffer = calloc(hashids_estimate_encoded_size(hashids, 1, &number), 1);
-
-    if (!buffer) {
-        return NULL;
-    }
-
-    hashids_encode_hex(hashids, buffer, hex_str);
 
     return buffer;
 }
