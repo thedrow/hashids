@@ -96,7 +96,7 @@ class ibuffer(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         item = self._queue.get(True)
         if item is _sentinel:
             raise StopIteration()

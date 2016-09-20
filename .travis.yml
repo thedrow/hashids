@@ -10,11 +10,21 @@ env:
     global:
       - HYPOTHESIS_PROFILE=ci
     matrix:
-        - TOXENV=py27
-        - TOXENV=py33
-        - TOXENV=py34
-        - TOXENV=py35
-        - TOXENV=pypy
+        - TOXENV=py27-benchmark
+        - TOXENV=py27-hashids
+        - TOXENV=py27-hypothesis
+        - TOXENV=py33-benchmark
+        - TOXENV=py33-hashids
+        - TOXENV=py33-hypothesis
+        - TOXENV=py34-benchmark
+        - TOXENV=py34-hashids
+        - TOXENV=py34-hypothesis
+        - TOXENV=py35-benchmark
+        - TOXENV=py35-hashids
+        - TOXENV=py35-hypothesis
+        - TOXENV=pypy-benchmark
+        - TOXENV=pypy-hashids
+        - TOXENV=pypy-hypothesis
 
 before_install:
     - |
