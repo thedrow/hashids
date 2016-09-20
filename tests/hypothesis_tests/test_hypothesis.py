@@ -5,8 +5,7 @@ import string
 import pytest
 from hashids import Hashids
 from hashids_cffi import Hashids as HashidsCFFI
-from hypothesis import assume
-from hypothesis import given
+from hypothesis import assume, given
 from hypothesis.strategies import text, integers, tuples, lists, sampled_from, characters
 
 valid_characters = list(string.ascii_letters + string.digits + string.punctuation)

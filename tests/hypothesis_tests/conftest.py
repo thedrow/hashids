@@ -2,7 +2,7 @@ import os
 from hypothesis import settings, Verbosity
 
 try:
-    from tests.examples_database import ThreadedSQLiteExampleDatabase
+    from tests.hypothesis_tests.examples_database import ThreadedSQLiteExampleDatabase
 
     hypothesis_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../.hypothesis')
     settings.register_profile("ci", settings(max_examples=100000, verbosity=Verbosity.verbose,
