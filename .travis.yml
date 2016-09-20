@@ -32,4 +32,4 @@ before_install:
         fi
 install: pip install tox
 
-script: tox -vvv
+script: tox
