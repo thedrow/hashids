@@ -4,31 +4,23 @@ cache:
     directories:
         - $TRAVIS_BUILD_DIR/.hypothesis
 python:
+    - '2.7'
+    - '3.3'
+    - '3.4'
     - '3.5'
+    - 'pypy'
 
 env:
     global:
       - HYPOTHESIS_PROFILE=ci
     matrix:
-        - TOXENV=py27-benchmark
-        - TOXENV=py27-hashids
-        - TOXENV=py27-hypothesis
-        - TOXENV=py33-benchmark
-        - TOXENV=py33-hashids
-        - TOXENV=py33-hypothesis
-        - TOXENV=py34-benchmark
-        - TOXENV=py34-hashids
-        - TOXENV=py34-hypothesis
-        - TOXENV=py35-benchmark
-        - TOXENV=py35-hashids
-        - TOXENV=py35-hypothesis
-        - TOXENV=pypy-benchmark
-        - TOXENV=pypy-hashids
-        - TOXENV=pypy-hypothesis
+        - TOXENV=benchmark
+        - TOXENV=hashids
+        - TOXENV=hypothesis
 
 before_install:
     - |
-        if [ "$TOXENV" = "pypy" ]; then
+        if [ "$TRAVIS_PYTHON_VERSION" = "pypy" ]; then
           export PYENV_ROOT="$HOME/.pyenv"
           if [ -f "$PYENV_ROOT/bin/pyenv" ]; then
             pushd "$PYENV_ROOT" && git pull && popd
