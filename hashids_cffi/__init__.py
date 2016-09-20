@@ -20,7 +20,7 @@ def _is_uint(number):
 
 
 def _convert_buffer_to_string(buffer):
-    if lib.hashids_errno != 0 or buffer != ffi.NULL:
+    if lib.hashids_errno != 0 or buffer == ffi.NULL:
         return ''
 
     result = str(ffi.string(buffer).decode('ascii'))
