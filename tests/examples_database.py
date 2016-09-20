@@ -102,6 +102,12 @@ class ibuffer(object):
             raise StopIteration()
         return item
 
+    def next(self):
+        item = self._queue.get(True)
+        if item is _sentinel:
+            raise StopIteration()
+        return item
+
 
 class ThreadedSQLiteExampleDatabase(SQLiteExampleDatabase):
     def __init__(self, path=u':memory:', max_workers=2):
