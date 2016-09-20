@@ -83,7 +83,7 @@ class Hashids(object):
         if numbers == ffi.NULL:
             return ()
 
-        result = tuple(numbers[i] for i in range(numbers_count[0]))
+        result = tuple(ffi.unpack(numbers, numbers_count[0]))
         lib.free(numbers)
 
         if self.encode(*result) != hashid:
