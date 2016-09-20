@@ -11,12 +11,10 @@ python:
     - 'pypy'
 
 env:
-    global:
-      - HYPOTHESIS_PROFILE=ci
     matrix:
         - TOXENV=benchmark
         - TOXENV=hashids
-        - TOXENV=hypothesis
+        - TOXENV=hypothesis HYPOTHESIS_PROFILE=ci
 
 before_install:
     - |
