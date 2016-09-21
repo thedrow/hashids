@@ -41,7 +41,10 @@ def test_encode(salt, alphabet, min_length, numbers):
     hashids = Hashids(salt=salt, alphabet=alphabet, min_length=min_length)
     hashids_cffi = HashidsCFFI(salt=salt, alphabet=alphabet, min_length=min_length)
 
-    assert hashids.encode(*numbers) == hashids_cffi.encode(*numbers)
+    hashids_cffi_encoded_hash = hashids_cffi.encode(*numbers)
+    assert hashids.encode(*numbers) == hashids_cffi_encoded_hash
+
+    assert len(hashids_cffi_encoded_hash) >= min_length
 
 
 @given(text(alphabet=valid_characters, average_size=64),
