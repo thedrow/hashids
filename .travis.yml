@@ -4,17 +4,25 @@ cache:
     directories:
         - $TRAVIS_BUILD_DIR/.hypothesis
 python:
-    - '2.7'
-    - '3.3'
-    - '3.4'
     - '3.5'
-    - 'pypy'
 
 env:
     matrix:
-        - TOXENV=benchmark
-        - TOXENV=hashids
-        - TOXENV=hypothesis HYPOTHESIS_PROFILE=ci
+        - TOXENV=py27-benchmark
+        - TOXENV=py27-hashids
+        - TOXENV=py27-hypothesis HYPOTHESIS_PROFILE=ci
+        - TOXENV=py33-benchmark
+        - TOXENV=py33-hashids
+        - TOXENV=py33-hypothesis HYPOTHESIS_PROFILE=ci
+        - TOXENV=py34-benchmark
+        - TOXENV=py34-hashids
+        - TOXENV=py34-hypothesis HYPOTHESIS_PROFILE=ci
+        - TOXENV=py35-benchmark
+        - TOXENV=py35-hashids
+        - TOXENV=py35-hypothesis HYPOTHESIS_PROFILE=ci
+        - TOXENV=pypy-benchmark
+        - TOXENV=pypy-hashids
+        - TOXENV=pypy-hypothesis HYPOTHESIS_PROFILE=ci
 
 before_install:
     - |
