@@ -9,24 +9,24 @@ python:
 env:
     matrix:
         - TOXENV=py27-benchmark
-        - TOXENV=py27-hashids
-        - TOXENV=py27-hypothesis HYPOTHESIS_PROFILE=ci
+        - TOXENV=py27-hashids CFLAGS='-Wall -O0 -g'
+        - TOXENV=py27-hypothesis HYPOTHESIS_PROFILE=ci CFLAGS='-Wall -O0 -g'
         - TOXENV=py33-benchmark
-        - TOXENV=py33-hashids
-        - TOXENV=py33-hypothesis HYPOTHESIS_PROFILE=ci
+        - TOXENV=py33-hashids CFLAGS='-Wall -O0 -g'
+        - TOXENV=py33-hypothesis HYPOTHESIS_PROFILE=ci CFLAGS='-Wall -O0 -g'
         - TOXENV=py34-benchmark
-        - TOXENV=py34-hashids
-        - TOXENV=py34-hypothesis HYPOTHESIS_PROFILE=ci
+        - TOXENV=py34-hashids CFLAGS='-Wall -O0 -g'
+        - TOXENV=py34-hypothesis HYPOTHESIS_PROFILE=ci CFLAGS='-Wall -O0 -g'
         - TOXENV=py35-benchmark
-        - TOXENV=py35-hashids
-        - TOXENV=py35-hypothesis HYPOTHESIS_PROFILE=ci
+        - TOXENV=py35-hashids CFLAGS='-Wall -O0 -g'
+        - TOXENV=py35-hypothesis HYPOTHESIS_PROFILE=ci CFLAGS='-Wall -O0 -g'
         - TOXENV=pypy-benchmark
-        - TOXENV=pypy-hashids
-        - TOXENV=pypy-hypothesis HYPOTHESIS_PROFILE=ci
+        - TOXENV=pypy-hashids CFLAGS='-Wall -O0 -g'
+        - TOXENV=pypy-hypothesis HYPOTHESIS_PROFILE=ci CFLAGS='-Wall -O0 -g'
 
 before_install:
     - |
-        if [ "$TOXENV" = "pypy*" ]; then
+        if [[ "$TOXENV" == "pypy*" ]]; then
           export PYENV_ROOT="$HOME/.pyenv"
           if [ -f "$PYENV_ROOT/bin/pyenv" ]; then
             pushd "$PYENV_ROOT" && git pull && popd
