@@ -26,7 +26,7 @@ env:
 
 before_install:
     - |
-        if [[ "$TOXENV" == "pypy*" ]]; then
+        if [[ "$TOXENV" == pypy* ]]; then
           export PYENV_ROOT="$HOME/.pyenv"
           if [ -f "$PYENV_ROOT/bin/pyenv" ]; then
             pushd "$PYENV_ROOT" && git pull && popd
